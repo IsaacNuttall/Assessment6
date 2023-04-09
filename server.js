@@ -10,6 +10,14 @@ const app = express();
 
 app.use(express.json());
 
+app.use(express.static('public'));
+
+const { html, js,css } = require('./controller.js')
+
+app.get('/api/html', html)
+app.get('/api/js', js)
+app.get('/api/css', css)
+
 // Add up the total health of all the robots
 const calculateTotalHealth = (robots) =>
   robots.reduce((total, { health }) => total + health, 0);

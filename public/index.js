@@ -34,7 +34,7 @@ const makeRobotChoiceCard = (bot) => {
         <button class="bot-btn" onclick="chooseBot(${bot.id})">Add to Duo</button>
         </div>
     `;
-};
+}
 
 const makeRobotPlayerCard = (bot) => {
   return `
@@ -47,7 +47,7 @@ const makeRobotPlayerCard = (bot) => {
         <button class="bot-btn" onclick="putBotBack(${bot.id})">Remove from Duo</button>
         </div>
     `;
-};
+}
 
 const makeRobotDisplayCard = (bot) => {
   return `
@@ -59,7 +59,7 @@ const makeRobotDisplayCard = (bot) => {
         <p>Attack 2: ${bot.attacks[1].damage} damage</p>
         </div>
     `;
-};
+}
 
 const renderChoices = () => {
   choicesDiv.innerHTML = "";
@@ -69,7 +69,7 @@ const renderChoices = () => {
     let botHtml = makeRobotChoiceCard(choice);
     choicesDiv.innerHTML += botHtml;
   });
-};
+}
 
 const renderCompDuo = () => {
   compDuoDiv.innerHTML = "";
@@ -79,7 +79,7 @@ const renderCompDuo = () => {
     let botHtml = makeRobotDisplayCard(bot);
     compDuoDiv.innerHTML += botHtml;
   });
-};
+}
 
 const renderPlayerDuo = () => {
   playerDuoDiv.innerHTML = "";
@@ -89,7 +89,7 @@ const renderPlayerDuo = () => {
     let botHtml = makeRobotPlayerCard(bot);
     playerDuoDiv.innerHTML += botHtml;
   });
-};
+}
 
 const chooseBot = (id) => {
   if (playerDuo.length === 2) {
@@ -103,7 +103,7 @@ const chooseBot = (id) => {
   if (playerDuo.length === 2) {
     duelBtn.classList.remove("hide");
   }
-};
+}
 
 const putBotBack = (id) => {
   let index = playerDuo.findIndex((bot) => bot.id === id);
@@ -115,7 +115,7 @@ const putBotBack = (id) => {
   if (playerDuo.length === 0) {
     yourDuoHeader.classList.add("hide");
   }
-};
+}
 
 const drawFive = () => {
   axios.get("/api/robots/shuffled").then((res) => {
@@ -127,7 +127,7 @@ const drawFive = () => {
 
     drawBtn.classList.add("hide");
   });
-};
+}
 
 const duel = () => {
   resultsText.textContent = "Dueling...";
@@ -145,7 +145,7 @@ const duel = () => {
       getPlayerStats();
     });
   }, 1500);
-};
+}
 
 const reset = () => {
   resultsText.textContent = "";
@@ -158,14 +158,14 @@ const reset = () => {
   renderPlayerDuo();
   drawBtn.classList.remove("hide");
   compDuoHeader.classList.add("hide");
-};
+}
 
 const getPlayerStats = () => {
   axios.get("/api/player").then(({ data: { wins, losses } }) => {
     winsText.textContent = `Wins: ${wins}`;
     lossesTest.textContent = `Losses: ${losses}`;
   });
-};
+}
 
 const getAllBots = () => {
   axios.get("/api/robots").then(({ data }) => {
@@ -176,7 +176,8 @@ const getAllBots = () => {
       allBotsDiv.innerHTML += botHtml;
     });
   });
-};
+}
+
 
 drawBtn.addEventListener("click", drawFive);
 duelBtn.addEventListener("click", duel);
