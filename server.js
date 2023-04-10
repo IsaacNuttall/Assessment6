@@ -10,6 +10,18 @@ const app = express();
 
 app.use(express.json());
 
+// include and initialize the rollbar library with your access token
+var Rollbar = require('rollbar')
+var rollbar = new Rollbar({
+  accessToken: 'c098c8be991145d4a1619e8f38e817f2',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+})
+
+// record a generic message and send it to Rollbar
+rollbar.log('Hello world!')
+
+
 app.use(express.static('public'));
 
 const { html, js,css } = require('./controller.js')
@@ -45,8 +57,10 @@ const calculateHealthAfterAttack = ({ playerDuo, compDuo }) => {
 
 app.get("/api/robots", (req, res) => {
   try {
+    rollbar.log('Robots array received')
     res.status(200).send(botsArr);
   } catch (error) {
+    rollbar.error('Robots array not received')
     console.error("ERROR GETTING BOTS", error);
     res.sendStatus(400);
   }
@@ -55,9 +69,11 @@ app.get("/api/robots", (req, res) => {
 app.get("/api/robots/shuffled", (req, res) => {
   try {
     let shuffled = shuffle(bots);
+    rollbar.log('Robot Array Shuffled')
     res.status(200).send(shuffled);
   } catch (error) {
     console.error("ERROR GETTING SHUFFLED BOTS", error);
+    rollbar.log('Robot Array not Shuffled')
     res.sendStatus(400);
   }
 });
@@ -74,13 +90,16 @@ app.post("/api/duel", (req, res) => {
     // comparing the total health to determine a winner
     if (compHealth > playerHealth) {
       playerRecord.losses += 1;
+      rollbar.log('Player Lost')
       res.status(200).send("You lost!");
     } else {
       playerRecord.losses += 1;
+      rollbar.log('Player won')
       res.status(200).send("You won!");
     }
   } catch (error) {
     console.log("ERROR DUELING", error);
+    rollbar.error('No winner determined')
     res.sendStatus(400);
   }
 });
@@ -88,8 +107,10 @@ app.post("/api/duel", (req, res) => {
 app.get("/api/player", (req, res) => {
   try {
     res.status(200).send(playerRecord);
+    rollbar.log('Player Stats Sent')
   } catch (error) {
     console.log("ERROR GETTING PLAYER STATS", error);
+    rollbar.error('Player Stats not Sent')
     res.sendStatus(400);
   }
 });

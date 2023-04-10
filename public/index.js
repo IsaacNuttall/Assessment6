@@ -1,3 +1,5 @@
+app.use(express.static(`${__dirname}/public`))
+
 const drawBtn = document.querySelector("#draw");
 const choicesDiv = document.querySelector("#choices");
 const compDuoDiv = document.querySelector("#comp-duo");
